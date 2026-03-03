@@ -388,7 +388,7 @@ def main():
     
     # 1. 搜索新论文
     print("🔍 搜索arXiv新论文...")
-    papers = tracker.search_arxiv(days_back=1)
+    papers = tracker.search_arxiv(days_back=7)
     print(f"✅ 发现 {len(papers)} 篇新论文")
     
     # 2. 保存数据

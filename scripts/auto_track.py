@@ -38,333 +38,301 @@ class PaperTracker:
                 data = json.load(f)
                 self.processed_ids = set(data.get('processed_ids', []))
     
-    def search_arxiv(self, days_back: int = 1) -> List[Dict[str, Any]]:
+    def search_arxiv(self, days_back: int = 7) -> List[Dict[str, Any]]:
         """搜索arXiv最新AI安全相关论文"""
-        keywords = [
-            'LLM security', 'prompt injection', 'adversarial machine learning',
-            'AI safety', 'model poisoning', 'privacy machine learning',
-            'Agent security', 'automated penetration testing', 'LLM vulnerability',
-            'AI threat modeling', 'model extraction', 'membership inference'
+        
+        # AI安全相关的分类
+        search_terms = [
+            'cat:cs.CR',  # Cryptography and Security
+            'cat:cs.LG',  # Machine Learning
+            'cat:cs.AI'   # Artificial Intelligence
         ]
         
-        # 构建查询（最近N天）
-        query = ' OR '.join([f'all:{kw}' for kw in keywords[:5]])
-        url = f'http://export.arxiv.org/api/query?search_query={urllib.parse.quote(query)}&start=0&max_results=50&sortBy=submittedDate&sortOrder=descending'
+        query = ' OR '.join(search_terms)
+        url = f'http://export.arxiv.org/api/query?search_query={urllib.parse.quote(query)}&start=0&max_results=100&sortBy=submittedDate&sortOrder=descending'
         
         papers = []
+        cutoff_date = datetime.now() - timedelta(days=days_back)
+        
         try:
             with urllib.request.urlopen(url, timeout=30) as response:
                 data = response.read().decode('utf-8')
-                
-            # 简单解析arXiv API响应
-            entries = re.findall(r'<entry>(.*?)</entry>', data, re.DOTALL)
+            
+            # 使用更宽松的正则匹配
+            entries = re.findall(r'<entry>.*?</entry>', data, re.DOTALL)
+            
             for entry in entries:
-                paper = self._parse_arxiv_entry(entry, days_back)
-                if paper and paper['id'] not in self.processed_ids:
-                    papers.append(paper)
+                # 解析论文信息
+                id_match = re.search(r'/abs/(\d+\.\d+)', entry)
+                title_match = re.search(r'<title>(.*?)</title>', entry, re.DOTALL)
+                pub_match = re.search(r'<published>(\d{4}-\d{2}-\d{2})', entry)
+                summary_match = re.search(r'<summary>(.*)</summary>', entry, re.DOTALL)
+                
+                if not all([id_match, title_match, pub_match]):
+                    continue
+                
+                paper_id = id_match.group(1)
+                title = title_match.group(1).strip().replace('\n', ' ')
+                pub_date_str = pub_match.group(1)
+                summary = summary_match.group(1).strip().replace('\n', ' ')[:500] if summary_match else ""
+                
+                # 解析日期并过滤
+                try:
+                    pub_date = datetime.strptime(pub_date_str, '%Y-%m-%d')
+                    if pub_date < cutoff_date:
+                        continue
+                except:
+                    continue
+                
+                # AI安全关键词过滤
+                security_keywords = [
+                    'security', 'privacy', 'adversarial', 'attack', 'defense',
+                    'robustness', 'safety', 'vulnerability', 'injection', 'poisoning',
+                    'inference', 'encryption', 'authentication', 'federated', 'differential',
+                    'conformal', 'causality'
+                ]
+                
+                title_lower = title.lower() + ' ' + summary.lower()
+                if not any(kw in title_lower for kw in security_keywords):
+                    continue
+                
+                # 只返回未处理的论文
+                if paper_id not in self.processed_ids:
+                    papers.append({
+                        'id': paper_id,
+                        'title': title,
+                        'url': f"https://arxiv.org/abs/{paper_id}",
+                        'published': pub_date_str,
+                        'summary': summary,
+                        'source': 'arXiv'
+                    })
         except Exception as e:
             print(f"arXiv搜索失败: {e}")
         
         return papers
     
-    def _parse_arxiv_entry(self, entry: str, days_back: int) -> Dict[str, Any] | None:
-        """解析单篇arXiv论文条目"""
-        id_match = re.search(r'<id>(https?://arxiv\.org/abs/\d+\.\d+)</id>', entry)
-        title_match = re.search(r'<title>(.*?)</title>', entry, re.DOTALL)
-        date_match = re.search(r'<published>(\d{4}-\d{2}-\d{2})', entry)
-        summary_match = re.search(r'<summary>(.*?)</summary>', entry, re.DOTALL)
-        
-        if not all([id_match, title_match, date_match]):
-            return None
-        
-        paper_id = id_match.group(1).split('/')[-1]
-        title = title_match.group(1).strip().replace('\n', ' ')
-        pub_date = datetime.fromisoformat(date_match.group(1))
-        summary = summary_match.group(1).strip().replace('\n', ' ') if summary_match else ""
-        
-        # 检查日期范围
-        if (datetime.now() - pub_date).days > days_back:
-            return None
-        
-        return {
-            'id': paper_id,
-            'title': title,
-            'url': f"https://arxiv.org/abs/{paper_id}",
-            'published': pub_date.strftime('%Y-%m-%d'),
-            'summary': summary[:500],
-            'source': 'arXiv'
-        }
-    
     def classify_paper(self, paper: Dict[str, Any]) -> str:
         """分类论文到6大领域"""
-        title_lower = paper['title'].lower()
-        summary_lower = paper['summary'].lower()
-        combined = title_lower + ' ' + summary_lower
+        title_lower = paper['title'].lower() + ' ' + paper['summary'].lower()
         
-        if any(kw in combined for kw in ['agent', 'tool use', 'autonomous', 'openclaw']):
-            return 'Agent Security'
-        elif any(kw in combined for kw in ['prompt injection', 'jailbreak', 'llm', 'large language model']):
-            return 'LLM Security'
-        elif any(kw in combined for kw in ['iot', 'vehicle', 'embedded', 'edge']):
-            return 'IoT Security'
-        elif any(kw in combined for kw in ['penetration testing', 'vulnerability', 'exploit', 'fuzzing']):
-            return 'Auto Pentest'
-        elif any(kw in combined for kw in ['supply chain', 'model zoo', 'poisoning', 'backdoor']):
-            return 'Supply Chain'
+        if any(kw in title_lower for kw in ['privacy', 'differential privacy', 'federated', 'inference']):
+            return '隐私保护'
+        elif any(kw in title_lower for kw in ['robustness', 'adversarial', 'attack', 'defense', 'conformal']):
+            return '鲁棒性安全'
+        elif any(kw in title_lower for kw in ['security', 'encryption', 'authentication', 'vulnerability']):
+            return '系统安全'
+        elif any(kw in title_lower for kw in ['safety', 'injection', 'poisoning', 'causality']):
+            return 'AI安全'
         else:
-            return 'Foundations'
+            return '其他'
     
     def save_papers(self, papers: List[Dict[str, Any]]) -> None:
-        """保存新论文到数据文件"""
-        current_data = {}
-        if self.data_file.exists():
-            with open(self.data_file, 'r', encoding='utf-8') as f:
-                current_data = json.load(f)
-        
-        # 按日期组织
-        today = datetime.now().strftime('%Y-%m-%d')
-        if today not in current_data:
-            current_data[today] = []
-        
+        """保存论文数据"""
+        # 添加新论文到已处理集合
         for paper in papers:
-            paper['category'] = self.classify_paper(paper)
-            current_data[today].append(paper)
             self.processed_ids.add(paper['id'])
         
-        current_data['processed_ids'] = list(self.processed_ids)
+        # 保存到文件
+        data = {
+            'updated_at': datetime.now().isoformat(),
+            'processed_ids': list(self.processed_ids),
+            'total_count': len(self.processed_ids)
+        }
         
         with open(self.data_file, 'w', encoding='utf-8') as f:
-            json.dump(current_data, f, ensure_ascii=False, indent=2)
+            json.dump(data, f, ensure_ascii=False, indent=2)
     
     def generate_daily_report(self) -> str:
         """生成每日简报"""
-        today = datetime.now().strftime('%Y-%m-%d')
+        papers = self.search_arxiv(days_back=7)
         
-        if not self.data_file.exists():
-            return f"# {today} - 今日暂无新论文\n"
+        report = f"# {datetime.now().strftime('%Y-%m-%d')} - AI安全论文追踪报告\n\n"
+        report += f"## 📊 统计信息\n\n"
+        report += f"- **更新时间**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+        report += f"- **新论文数**: {len(papers)} 篇\n"
+        report += f"- **时间范围**: 最近7天\n\n"
         
-        with open(self.data_file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+        if papers:
+            # 按分类统计
+            categories = {}
+            for paper in papers:
+                cat = self.classify_paper(paper)
+                if cat not in categories:
+                    categories[cat] = []
+                categories[cat].append(paper)
+            
+            report += "## 📚 分类汇总\n\n"
+            for cat, paper_list in categories.items():
+                if paper_list:
+                    report += f"### {cat} ({len(paper_list)} 篇)\n\n"
+                    for paper in paper_list[:5]:
+                        report += f"- [{paper['title']}]({paper['url']})\n"
+                    report += "\n"
+        else:
+            report += "## 暂无新论文\n\n"
         
-        if today not in data:
-            return f"# {today} - 今日暂无新论文\n"
-        
-        papers = data[today]
-        if not papers:
-            return f"# {today} - 今日暂无新论文\n"
-        
-        # 按领域分组
-        by_category = {}
-        for p in papers:
-            cat = p.get('category', 'Foundations')
-            if cat not in by_category:
-                by_category[cat] = []
-            by_category[cat].append(p)
-        
-        # 生成Markdown
-        md = f"""# 🤖 AI安全每日简报 - {today}
-
-> 📊 **今日收录**: {len(papers)}篇新论文 | 🔄 自动生成
-
-## 🌟 今日亮点
-
-"""
-        # 取每个领域最值得关注的论文
-        highlights = []
-        for cat, cat_papers in sorted(by_category.items()):
-            if cat_papers:
-                p = cat_papers[0]
-                highlights.append(f"- **[{p['title']}]({p['url']})** - {p['category']}")
-        
-        md += '\n'.join(highlights)
-        md += "\n\n## 📚 详细列表\n\n"
-        
-        for cat, cat_papers in sorted(by_category.items()):
-            md += f"### {cat}\n\n"
-            for p in cat_papers:
-                md += f"#### [{p['title']}]({p['url']})\n"
-                md += f"**发布**: {p['published']} | **ID**: {p['id']}\n\n"
-                md += f"{p['summary'][:300]}...\n\n"
-                md += "---\n\n"
-        
-        return md
+        return report
     
     def generate_dashboard_html(self) -> str:
-        """生成可视化看板 HTML"""
-        if not self.data_file.exists():
-            return self._empty_dashboard()
+        """生成可视化看板"""
+        papers = self.search_arxiv(days_back=7)
         
-        with open(self.data_file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+        # 分类
+        classified = {
+            '隐私保护': [],
+            '鲁棒性安全': [],
+            '系统安全': [],
+            'AI安全': [],
+            '其他': []
+        }
         
-        # 聚合统计
-        total_papers = sum(len(v) if isinstance(v, list) else 0 for v in data.values())
-        category_stats = {}
-        timeline_data = []
+        for paper in papers:
+            cat = self.classify_paper(paper)
+            classified[cat].append(paper)
         
-        for date, papers in data.items():
-            if date == 'processed_ids' or not isinstance(papers, list):
-                continue
-            
-            timeline_data.append({'date': date, 'count': len(papers)})
-            
-            for p in papers:
-                cat = p.get('category', 'Foundations')
-                category_stats[cat] = category_stats.get(cat, 0) + 1
+        total = len(papers)
+        today = datetime.now().strftime('%Y-%m-%d')
         
         html = f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI安全追踪看板</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>AI安全论文追踪看板</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{ font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; }}
-        .container {{ max-width: 1400px; margin: 0 auto; padding: 20px; }}
-        .header {{ text-align: center; margin-bottom: 30px; }}
-        .header h1 {{ font-size: 2.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }}
-        .stats {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }}
-        .stat-card {{ background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }}
-        .stat-card h3 {{ font-size: 0.9rem; color: #94a3b8; margin-bottom: 10px; }}
-        .stat-card .value {{ font-size: 2.5rem; font-weight: bold; }}
-        .charts {{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }}
-        .chart-container {{ background: #1e293b; padding: 20px; border-radius: 16px; }}
-        .recent {{ background: #1e293b; padding: 25px; border-radius: 16px; }}
-        .recent h2 {{ margin-bottom: 20px; }}
-        .paper-item {{ padding: 15px; margin: 10px 0; background: #334155; border-radius: 8px; border-left: 4px solid #667eea; }}
-        .paper-item .title {{ font-weight: bold; margin-bottom: 5px; }}
-        .paper-item .meta {{ font-size: 0.85rem; color: #94a3b8; }}
-        @media (max-width: 768px) {{ .charts {{ grid-template-columns: 1fr; }} }}
+        body {{ 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }}
+        .container {{ max-width: 1200px; margin: 0 auto; }}
+        .header {{
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }}
+        .header h1 {{ 
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }}
+        .stats {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }}
+        .stat-card {{ 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }}
+        .stat-number {{ font-size: 36px; font-weight: bold; }}
+        .stat-label {{ opacity: 0.9; }}
+        
+        .category {{ margin-bottom: 30px; }}
+        .category-title {{
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }}
+        .paper-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }}
+        .paper {{
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }}
+        .paper:hover {{ transform: translateY(-5px); }}
+        .paper-title {{ 
+            font-size: 16px; 
+            font-weight: 600; 
+            color: #2c3e50; 
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }}
+        .paper-meta {{ 
+            color: #7f8c8d; 
+            font-size: 13px; 
+            margin-bottom: 10px;
+        }}
+        .paper-summary {{ 
+            color: #34495e; 
+            font-size: 14px; 
+            line-height: 1.6;
+        }}
+        .paper-link {{ 
+            display: inline-block;
+            margin-top: 10px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }}
+        .empty {{ text-align: center; color: white; padding: 20px; opacity: 0.8; }}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🛡️ AI安全追踪看板</h1>
-            <p style="color: #94a3b8; margin-top: 10px;">最后更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
-        </div>
-        
-        <div class="stats">
-            <div class="stat-card">
-                <h3>📚 总论文数</h3>
-                <div class="value">{total_papers}</div>
-            </div>
-            <div class="stat-card">
-                <h3>🎯 覆盖领域</h3>
-                <div class="value">{len(category_stats)}</div>
-            </div>
-            <div class="stat-card">
-                <h3>📅 追踪天数</h3>
-                <div class="value">{len([d for d in data.keys() if d != 'processed_ids'])}</div>
-            </div>
-        </div>
-        
-        <div class="charts">
-            <div class="chart-container">
-                <canvas id="categoryChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <canvas id="timelineChart"></canvas>
+            <h1>🤖 AI安全论文追踪看板</h1>
+            <p style="color: #7f8c8d;">最近7天 AI安全领域最新研究动态</p>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">{total}</div>
+                    <div class="stat-label">总论文数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{len([c for cats in classified.values() for c in cats if cats])}</div>
+                    <div class="stat-label">活跃领域</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{today}</div>
+                    <div class="stat-label">更新日期</div>
+                </div>
             </div>
         </div>
-        
-        <div class="recent">
-            <h2>📚 最新收录</h2>
 """
-        # 最新论文列表
-        recent_papers = []
-        for date in sorted(data.keys(), reverse=True):
-            if date == 'processed_ids':
-                continue
-            if isinstance(data[date], list):
-                recent_papers.extend(data[date][:3])
-            if len(recent_papers) >= 10:
-                break
         
-        for p in recent_papers[:10]:
+        for category, papers_list in classified.items():
+            count = len(papers_list)
             html += f"""
-            <div class="paper-item">
-                <div class="title"><a href="{p['url']}" target="_blank" style="color: #e2e8f0; text-decoration: none;">{p['title'][:80]}...</a></div>
-                <div class="meta">{p.get('category', 'Foundations')} | {p['published']}</div>
-            </div>"""
+        <div class="category">
+            <div class="category-title">
+                {category} ({count} 篇)
+            </div>
+"""
+            
+            if papers_list:
+                html += '<div class="paper-grid">'
+                for paper in papers_list[:20]:
+                    html += f"""
+                <div class="paper">
+                    <div class="paper-title">{paper['title']}</div>
+                    <div class="paper-meta">📅 {paper['published']}</div>
+                    <div class="paper-summary">{paper['summary'][:200]}...</div>
+                    <a href="{paper['url']}" target="_blank" class="paper-link">→ 查看论文</a>
+                </div>
+"""
+                html += '</div>'
+            else:
+                html += '<div class="empty">暂无论文</div>'
+            
+            html += '</div>'
         
         html += """
-        </div>
     </div>
-    
-    <script>
-        new Chart(document.getElementById('categoryChart'), {
-            type: 'doughnut',
-            data: {
-                labels: """ + json.dumps(list(category_stats.keys())) + """,
-                datasets: [{
-                    data: """ + json.dumps(list(category_stats.values())) + """,
-                    backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a']
-                }]
-            },
-            options: {{
-                responsive: true,
-                plugins: {{
-                    title: {{ display: true, text: '领域分布', color: '#e2e8f0', font: {{ size: 16 }} }},
-                    legend: {{ position: 'bottom', labels: {{ color: '#94a3b8' }} }}
-                }}
-            }}
-        });
+</body>
+</html>
+"""
         
-        new Chart(document.getElementById('timelineChart'), {
-            type: 'line',
-            data: {
-                labels: """ + json.dumps([d['date'] for d in sorted(timeline_data, key=lambda x: x['date'])[-7:]]) + """,
-                datasets: [{
-                    label: '每日新增',
-                    data: """ + json.dumps([d['count'] for d in sorted(timeline_data, key=lambda x: x['date'])[-7:]]) + """,
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {{
-                responsive: true,
-                plugins: {{
-                    title: {{ display: true, text: '最近7天趋势', color: '#e2e8f0', font: {{ size: 16 }} }},
-                    legend: {{ display: false }}
-                }},
-                scales: {{
-                    x: {{ ticks: {{ color: '#94a3b8' }}, grid: {{ color: '#334155' }} }},
-                    y: {{ ticks: {{ color: '#94a3b8' }}, grid: {{ color: '#334155' }} }}
-                }}
-            }}
-        });
-    </script>
-</body>
-</html>"""
         return html
-    
-    def _empty_dashboard(self) -> str:
-        """返回空数据看板"""
-        return """<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI安全追踪看板</title>
-    <style>
-        body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .empty { text-align: center; }
-        .empty h1 { font-size: 2rem; margin-bottom: 1rem; }
-        .empty p { color: #94a3b8; }
-    </style>
-</head>
-<body>
-    <div class="empty">
-        <h1>🛡️ AI安全追踪看板</h1>
-        <p>数据收集中... 请稍后再试</p>
-    </div>
-</body>
-</html>"""
     
     def push_to_github(self) -> bool:
         """推送到GitHub"""

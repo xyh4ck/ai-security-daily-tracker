@@ -15,12 +15,21 @@ import re
 from typing import List, Dict, Any
 
 class PaperTracker:
-    def __init__(self, base_dir: Path):
-        self.base_dir = base_dir
-        self.reports_dir = base_dir / "Reports"
-        self.daily_dir = base_dir / "daily"
-        self.data_file = base_dir / "data" / "papers.json"
-        self.data_file.parent.mkdir(exist_ok=True)
+    def __init__(self, base_dir: Path = None):
+        # 自动检测脚本所在目录作为项目根目录
+        if base_dir is None:
+            script_dir = Path(__file__).parent
+            base_dir = script_dir.parent
+        
+        self.base_dir = Path(base_dir).resolve()
+        self.reports_dir = self.base_dir / "Reports"
+        self.daily_dir = self.base_dir / "daily"
+        self.data_file = self.base_dir / "data" / "papers.json"
+        
+        # 确保目录存在
+        self.data_file.parent.mkdir(parents=True, exist_ok=True)
+        self.daily_dir.mkdir(parents=True, exist_ok=True)
+        self.reports_dir.mkdir(parents=True, exist_ok=True)
         
         # 已处理论文ID集合
         self.processed_ids = set()
@@ -132,7 +141,7 @@ class PaperTracker:
         today = datetime.now().strftime('%Y-%m-%d')
         
         if not self.data_file.exists():
-            return "# 今日暂无新论文\n"
+            return f"# {today} - 今日暂无新论文\n"
         
         with open(self.data_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -160,7 +169,7 @@ class PaperTracker:
 ## 🌟 今日亮点
 
 """
-        # 取每个领域最值得关注的论文（简单策略：标题长度适中的）
+        # 取每个领域最值得关注的论文
         highlights = []
         for cat, cat_papers in sorted(by_category.items()):
             if cat_papers:
@@ -183,7 +192,7 @@ class PaperTracker:
     def generate_dashboard_html(self) -> str:
         """生成可视化看板 HTML"""
         if not self.data_file.exists():
-            return "<html><body>暂无数据</body></html>"
+            return self._empty_dashboard()
         
         with open(self.data_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -264,7 +273,7 @@ class PaperTracker:
         <div class="recent">
             <h2>📚 最新收录</h2>
 """
-        # 最新论文列表（前10篇）
+        # 最新论文列表
         recent_papers = []
         for date in sorted(data.keys(), reverse=True):
             if date == 'processed_ids':
@@ -286,7 +295,6 @@ class PaperTracker:
     </div>
     
     <script>
-        // 类别分布图
         new Chart(document.getElementById('categoryChart'), {
             type: 'doughnut',
             data: {
@@ -305,7 +313,6 @@ class PaperTracker:
             }}
         });
         
-        // 时间趋势图
         new Chart(document.getElementById('timelineChart'), {
             type: 'line',
             data: {
@@ -336,6 +343,29 @@ class PaperTracker:
 </html>"""
         return html
     
+    def _empty_dashboard(self) -> str:
+        """返回空数据看板"""
+        return """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI安全追踪看板</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .empty { text-align: center; }
+        .empty h1 { font-size: 2rem; margin-bottom: 1rem; }
+        .empty p { color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div class="empty">
+        <h1>🛡️ AI安全追踪看板</h1>
+        <p>数据收集中... 请稍后再试</p>
+    </div>
+</body>
+</html>"""
+    
     def push_to_github(self) -> bool:
         """推送到GitHub"""
         try:
@@ -348,12 +378,13 @@ class PaperTracker:
                           check=True, capture_output=True)
             return True
         except subprocess.CalledProcessError as e:
-            print(f"GitHub推送失败: {e.stderr.decode()}")
+            print(f"GitHub推送失败: {e.stderr.decode() if e.stderr else str(e)}")
             return False
 
 def main():
-    base_dir = Path.home() / ".openclaw" / "workspace-research" / "ai-security-tracker"
-    tracker = PaperTracker(base_dir)
+    tracker = PaperTracker()
+    
+    print(f"📂 工作目录: {tracker.base_dir}")
     
     # 1. 搜索新论文
     print("🔍 搜索arXiv新论文...")
@@ -373,15 +404,15 @@ def main():
     
     # 4. 生成可视化看板
     dashboard_html = tracker.generate_dashboard_html()
-    (base_dir / 'board.html').write_text(dashboard_html, encoding='utf-8')
-    print(f"✅ 生成看板: {base_dir / 'board.html'}")
+    (tracker.base_dir / 'board.html').write_text(dashboard_html, encoding='utf-8')
+    print(f"✅ 生成看板: {tracker.base_dir / 'board.html'}")
     
-    # 5. 推送到GitHub
+    # 5. 推送到GitHub（仅在本地有配置时）
     print("🚀 推送到GitHub...")
     if tracker.push_to_github():
         print("✅ 推送成功")
     else:
-        print("❌ 推送失败")
+        print("⚠️ 跳过推送（可能由GitHub Actions处理）")
 
 if __name__ == '__main__':
     main()

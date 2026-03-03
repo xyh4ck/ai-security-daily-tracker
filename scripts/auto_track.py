@@ -352,7 +352,7 @@ class PaperTracker:
             return False
 
 def main():
-    base_dir = Path('/root/.openclaw/workspace-research/ai-security-tracker')
+    base_dir = Path.home() / ".openclaw" / "workspace-research" / "ai-security-tracker"
     tracker = PaperTracker(base_dir)
     
     # 1. 搜索新论文

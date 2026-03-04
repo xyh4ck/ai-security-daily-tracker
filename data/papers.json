@@ -1,187 +1,50 @@
 {
-  "updated_at": "2026-03-03T19:42:34.360942",
-  "papers": [
-    {
-      "id": "2603.02204",
-      "title": "Partial Causal Structure Learning for Valid Selective Conformal Inference under Interventions",
-      "url": "https://arxiv.org/abs/2603.02204",
-      "published": "2026-03-02",
-      "summary": "Selective conformal prediction can yield substantially tighter uncertainty sets when we can identify calibration examples that are exchangeable with the test example. In interventional settings, such as perturbation experiments in genomics, exchangeability often holds only within subsets of interventions that leave a target variable \"unaffected\" (e.g., non-descendants of an intervened node in a causal graph). We study the practical regime where this invariance structure is unknown and must be le",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02196",
-      "title": "Conformal Policy Control",
-      "url": "https://arxiv.org/abs/2603.02196",
-      "published": "2026-03-02",
-      "summary": "An agent must try new behaviors to explore and improve. In high-stakes environments, an agent that violates safety constraints may cause harm and must be taken offline, curtailing any future interaction. Imitating old behavior is safe, but excessive conservatism discourages exploration. How much behavior change is too much? We show how to use any safe reference policy as a probabilistic regulator for any optimized but untested policy. Conformal calibration on data from the safe policy determines",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02194",
-      "title": "From Leaderboard to Deployment: Code Quality Challenges in AV Perception Repositories",
-      "url": "https://arxiv.org/abs/2603.02194",
-      "published": "2026-03-02",
-      "summary": "Autonomous vehicle (AV) perception models are typically evaluated solely on benchmark performance metrics, with limited attention to code quality, production readiness and long-term maintainability. This creates a significant gap between research excellence and real-world deployment in safety-critical systems subject to international safety standards. To address this gap, we present the first large-scale empirical study of software quality in AV perception repositories, systematically analyzing ",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02188",
-      "title": "Multi-Head Low-Rank Attention",
-      "url": "https://arxiv.org/abs/2603.02188",
-      "published": "2026-03-02",
-      "summary": "Long-context inference in large language models is bottlenecked by Key--Value (KV) cache loading during the decoding stage, where the sequential nature of generation requires repeatedly transferring the KV cache from off-chip High-Bandwidth Memory (HBM) to on-chip Static Random-Access Memory (SRAM) at each step. While Multi-Head Latent Attention (MLA) significantly reduces the total KV cache size, it suffers from a sharding bottleneck during distributed decoding via Tensor Parallelism (TP). Sinc",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02178",
-      "title": "Reservoir Subspace Injection for Online ICA under Top-n Whitening",
-      "url": "https://arxiv.org/abs/2603.02178",
-      "published": "2026-03-02",
-      "summary": "Reservoir expansion can improve online independent component analysis (ICA) under nonlinear mixing, yet top-$n$ whitening may discard injected features. We formalize this bottleneck as \\emph{reservoir subspace injection} (RSI): injected features help only if they enter the retained eigenspace without displacing passthrough directions. RSI diagnostics (IER, SSO, $ρ_x$) identify a failure mode in our top-$n$ setting: stronger injection increases IER but crowds out passthrough energy ($ρ_x: 1.00\\!\\",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02170",
-      "title": "SageBwd: A Trainable Low-bit Attention",
-      "url": "https://arxiv.org/abs/2603.02170",
-      "published": "2026-03-02",
-      "summary": "Low-bit attention, such as SageAttention, has emerged as an effective approach for accelerating model inference, but its applicability to training remains poorly understood. In prior work, we introduced SageBwd, a trainable INT8 attention that quantizes six of seven attention matrix multiplications while preserving fine-tuning performance. However, SageBwd exhibited a persistent performance gap to full-precision attention (FPA) during pre-training. In this work, we investigate why this gap occur",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02161",
-      "title": "Boosting Device Utilization in Control Flow Auditing",
-      "url": "https://arxiv.org/abs/2603.02161",
-      "published": "2026-03-02",
-      "summary": "Micro-Controller Units (MCUs) are widely used in safety-critical systems, making them attractive targets for attacks. This calls for lightweight defenses that remain effective despite software compromise. Control Flow Auditing (CFAud) is one such mechanism wherein a remote verifier (Vrf) is guaranteed to received evidence about the control flow path taken on a prover (Prv) MCU, even when Prv software is compromised. Despite promising benefits, current CFAud architectures unfortunately require a ",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02159",
-      "title": "Instrumental and Proximal Causal Inference with Gaussian Processes",
-      "url": "https://arxiv.org/abs/2603.02159",
-      "published": "2026-03-02",
-      "summary": "Instrumental variable (IV) and proximal causal learning (Proxy) methods are central frameworks for causal inference in the presence of unobserved confounding. Despite substantial methodological advances, existing approaches rarely provide reliable epistemic uncertainty (EU) quantification. We address this gap through a Deconditional Gaussian Process (DGP) framework for uncertainty-aware causal learning. Our formulation recovers popular kernel estimators as the posterior mean, ensuring predictive",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02109",
-      "title": "Orchestrating Multimodal DNN Workloads in Wireless Neural Processing",
-      "url": "https://arxiv.org/abs/2603.02109",
-      "published": "2026-03-02",
-      "summary": "In edge inference, wireless resource allocation and accelerator-level deep neural network (DNN) scheduling have yet to be co-optimized in an end-to-end manner. The lack of coordination between wireless transmission and accelerator-level DNN execution prevents efficient overlap, leading to higher end-to-end inference latency. To address this issue, this paper investigates multimodal DNN workload orchestration in wireless neural processing (WNP), a paradigm that integrates wireless transmission an",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02095",
-      "title": "On the Rate of Convergence of GD in Non-linear Neural Networks: An Adversarial Robustness Perspective",
-      "url": "https://arxiv.org/abs/2603.02095",
-      "published": "2026-03-02",
-      "summary": "We study the convergence dynamics of Gradient Descent (GD) in a minimal binary classification setting, consisting of a two-neuron ReLU network and two training instances. We prove that even under these strong simplifying assumptions, while GD successfully converges to an optimal robustness margin, effectively maximizing the distance between the decision boundary and the training points, this convergence occurs at a prohibitively slow rate, scaling strictly as $Θ(1/\\ln(t))$. To the best of our kn",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02087",
-      "title": "Detection-Gated Glottal Segmentation with Zero-Shot Cross-Dataset Transfer and Clinical Feature Extraction",
-      "url": "https://arxiv.org/abs/2603.02087",
-      "published": "2026-03-02",
-      "summary": "Background: Accurate glottal segmentation in high-speed videoendoscopy (HSV) is essential for extracting kinematic biomarkers of laryngeal function. However, existing deep learning models often produce spurious artifacts in non-glottal frames and fail to generalize across different clinical settings.   Methods: We propose a detection-gated pipeline that integrates a YOLOv8-based detector with a U-Net segmenter. A temporal consistency wrapper ensures robustness by suppressing false positives duri",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02066",
-      "title": "Accelerating PDE Surrogates via RL-Guided Mesh Optimization",
-      "url": "https://arxiv.org/abs/2603.02066",
-      "published": "2026-03-02",
-      "summary": "Deep surrogate models for parametric partial differential equations (PDEs) can deliver high-fidelity approximations but remain prohibitively data-hungry: training often requires thousands of fine-grid simulations, each incurring substantial computational cost. To address this challenge, we introduce RLMesh, an end-to-end framework for efficient surrogate training under limited simulation budget. The key idea is to use reinforcement learning (RL) to adaptively allocate mesh grid points non-unifor",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02017",
-      "title": "Protection against Source Inference Attacks in Federated Learning",
-      "url": "https://arxiv.org/abs/2603.02017",
-      "published": "2026-03-02",
-      "summary": "Federated Learning (FL) was initially proposed as a privacy-preserving machine learning paradigm. However, FL has been shown to be susceptible to a series of privacy attacks. Recently, there has been concern about the Source Inference Attack (SIA), where an honest-but-curious central server attempts to identify exactly which client owns a given data point which was used in the training phase. Alarmingly, standard gradient obfuscation techniques with Differential Privacy have been shown to be ine",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.02010",
-      "title": "Noise-Calibrated Inference from Differentially Private Sufficient Statistics in Exponential Families",
-      "url": "https://arxiv.org/abs/2603.02010",
-      "published": "2026-03-02",
-      "summary": "Many differentially private (DP) data release systems either output DP synthetic data and leave analysts to perform inference as usual, which can lead to severe miscalibration, or output a DP point estimate without a principled way to do uncertainty quantification. This paper develops a clean and tractable middle ground for exponential families: release only DP sufficient statistics, then perform noise-calibrated likelihood-based inference and optional parametric synthetic data generation as pos",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.01990",
-      "title": "According to Me: Long-Term Personalized Referential Memory QA",
-      "url": "https://arxiv.org/abs/2603.01990",
-      "published": "2026-03-02",
-      "summary": "Personalized AI assistants must recall and reason over long-term user memory, which naturally spans multiple modalities and sources such as images, videos, and emails. However, existing Long-term Memory benchmarks focus primarily on dialogue history, failing to capture realistic personalized references grounded in lived experience. We introduce ATM-Bench, the first benchmark for multimodal, multi-source personalized referential Memory QA. ATM-Bench contains approximately four years of privacy-pr",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.01986",
-      "title": "Accurate, private, secure, federated U-statistics with higher degree",
-      "url": "https://arxiv.org/abs/2603.01986",
-      "published": "2026-03-02",
-      "summary": "We study the problem of computing a U-statistic with a kernel function f of degree k $\\ge$ 2, i.e., the average of some function f over all k-tuples of instances, in a federated learning setting. Ustatistics of degree 2 include several useful statistics such as Kendall's $τ$ coefficient, the Area under the Receiver-Operator Curve and the Gini mean difference. Existing methods provide solutions only under the lower-utility local differential privacy model and/or scale poorly in the size of the do",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.01958",
-      "title": "SoK: Is Sustainable the New Usable? Debunking The Myth of Fundamental Incompatibility Between Security and Sustainability",
-      "url": "https://arxiv.org/abs/2603.01958",
-      "published": "2026-03-02",
-      "summary": "Every year, millions of functional systems become e-waste because users are pressured to send their systems to landfills due to a lack of vendor support and difficulty in recycling. Vendors cite ``cybersecurity'' as the driver for short product support periods, leading to a prevalent, but uninterrogated, belief that cybersecurity and environmental sustainability are fundamentally contradictory; i.e., it is difficult, if not impossible, to build products that are secure, long-lasting, and reusabl",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.01949",
-      "title": "Probabilistic Retrofitting of Learned Simulators",
-      "url": "https://arxiv.org/abs/2603.01949",
-      "published": "2026-03-02",
-      "summary": "Dominant approaches for modelling Partial Differential Equations (PDEs) rely on deterministic predictions, yet many physical systems of interest are inherently chaotic and uncertain. While training probabilistic models from scratch is possible, it is computationally expensive and fails to leverage the significant resources already invested in high-performing deterministic backbones. In this work, we adopt a training-efficient strategy to transform pre-trained deterministic models into probabilis",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.01941",
-      "title": "BAED: a New Paradigm for Few-shot Graph Learning with Explanation in the Loop",
-      "url": "https://arxiv.org/abs/2603.01941",
-      "published": "2026-03-02",
-      "summary": "The challenges of training and inference in few-shot environments persist in the area of graph representation learning. The quality and quantity of labels are often insufficient due to the extensive expert knowledge required to annotate graph data. In this context, Few-Shot Graph Learning (FSGL) approaches have been developed over the years. Through sophisticated neural architectures and customized training pipelines, these approaches enhance model adaptability to new label distributions. Howeve",
-      "source": "arXiv"
-    },
-    {
-      "id": "2603.01938",
-      "title": "Explanation-Guided Adversarial Training for Robust and Interpretable Models",
-      "url": "https://arxiv.org/abs/2603.01938",
-      "published": "2026-03-02",
-      "summary": "Deep neural networks (DNNs) have achieved remarkable performance in many tasks, yet they often behave as opaque black boxes. Explanation-guided learning (EGL) methods steer DNNs using human-provided explanations or supervision on model attributions. These approaches improve interpretability but typically assume benign inputs and incur heavy annotation costs. In contrast, both predictions and saliency maps of DNNs could dramatically alter facing imperceptible perturbations or unseen patterns. Adv",
-      "source": "arXiv"
-    }
-  ],
+  "updated_at": "2026-03-04T23:34:18.363808",
   "processed_ids": [
-    "2603.02204",
-    "2603.02196",
-    "2603.02194",
-    "2603.02188",
-    "2603.02178",
-    "2603.02170",
-    "2603.02161",
-    "2603.02159",
-    "2603.02109",
-    "2603.02095",
-    "2603.02087",
-    "2603.02066",
-    "2603.02017",
-    "2603.02010",
-    "2603.01990",
+    "2603.03172",
     "2603.01986",
+    "2603.02095",
+    "2603.03251",
+    "2603.03119",
+    "2603.02161",
+    "2603.01938",
+    "2603.01990",
+    "2603.03108",
+    "2603.02969",
+    "2603.02204",
+    "2603.02973",
+    "2603.02066",
+    "2603.02178",
     "2603.01958",
-    "2603.01949",
     "2603.01941",
-    "2603.01938"
-  ]
+    "2603.03047",
+    "2603.02948",
+    "2603.02087",
+    "2603.02949",
+    "2603.02194",
+    "2603.03226",
+    "2603.02109",
+    "2603.03252",
+    "2603.02159",
+    "2603.01949",
+    "2603.03112",
+    "2603.02170",
+    "2603.03176",
+    "2603.02017",
+    "2603.03146",
+    "2603.02983",
+    "2603.03233",
+    "2603.02010",
+    "2603.02196",
+    "2603.03043",
+    "2603.03035",
+    "2603.02188",
+    "2603.03007",
+    "2603.02963",
+    "2603.03075",
+    "2603.03163",
+    "2603.03206",
+    "2603.03224"
+  ],
+  "total_count": 44
 }

@@ -99,433 +99,179 @@
             opacity: 0.9;
             font-size: 14px;
         }
+        .loading { 
+            text-align: center; 
+            color: white; 
+            padding: 40px; 
+            font-size: 18px;
+        }
+        .error { 
+            text-align: center; 
+            background: #e74c3c;
+            color: white; 
+            padding: 20px; 
+            border-radius: 10px;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>🛡️ AI安全论文追踪看板 - 2026年度</h1>
-            <p>检索时间范围: 2026-01-01 至 2026-03-04 (62天)</p>
+            <p id="date-range">正在加载数据...</p>
             <div class="stats">
                 <div class="stat-card">
-                    <div class="stat-number">1013</div>
+                    <div class="stat-number" id="total-papers">-</div>
                     <div class="stat-label">总论文数</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">5</div>
+                    <div class="stat-number" id="active-categories">-</div>
                     <div class="stat-label">研究领域</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">2026-03-04</div>
+                    <div class="stat-number" id="update-date">-</div>
                     <div class="stat-label">更新日期</div>
                 </div>
             </div>
         </div>
 
-        <div class="category">
-            <div class="category-title">
-                🤖 大模型/Agent安全
-                <span class="category-count">647 篇</span>
-            </div>
-            <div class="paper-grid">
-    
-                <div class="paper">
-                    <div class="paper-title">Conformal Policy Control...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Drew Prinster</div>
-                    <div class="paper-summary">An agent must try new behaviors to explore and improve. In high-stakes environments, an agent that violates safety constraints may cause harm and must...</div>
-                    <a href="https://arxiv.org/abs/2603.02196" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Sketch2Colab: Sketch-Conditioned Multi-Human Animation via Controllable Flow Dis...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Divyanshu Daiya</div>
-                    <div class="paper-summary">We present Sketch2Colab, which turns storyboard-style 2D sketches into coherent, object-aware 3D multi-human motion with fine-grained control over age...</div>
-                    <a href="https://arxiv.org/abs/2603.02190" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Reservoir Subspace Injection for Online ICA under Top-n Whitening...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Wenjun Xiao</div>
-                    <div class="paper-summary">Reservoir expansion can improve online independent component analysis (ICA) under nonlinear mixing, yet top-$n$ whitening may discard injected feature...</div>
-                    <a href="https://arxiv.org/abs/2603.02178" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Organizing, Orchestrating, and Benchmarking Agent Skills at Ecosystem Scale...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Hao Li</div>
-                    <div class="paper-summary">The rapid proliferation of Claude agent skills has raised the central question of how to effectively leverage, manage, and scale the agent skill ecosy...</div>
-                    <a href="https://arxiv.org/abs/2603.02176" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Boltzmann-based Exploration for Robust Decentralized Multi-Agent Planning...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Nhat Nguyen</div>
-                    <div class="paper-summary">Decentralized Monte Carlo Tree Search (Dec-MCTS) is widely used for cooperative multi-agent planning but struggles in sparse or skewed reward environm...</div>
-                    <a href="https://arxiv.org/abs/2603.02154" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">LongRLVR: Long-Context Reinforcement Learning Requires Verifiable Context Reward...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Guanzheng Chen</div>
-                    <div class="paper-summary">Reinforcement Learning with Verifiable Rewards (RLVR) has significantly advanced the reasoning capabilities of Large Language Models (LLMs) by optimiz...</div>
-                    <a href="https://arxiv.org/abs/2603.02146" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">LLMs as Strategic Actors: Behavioral Alignment, Risk Calibration, and Argumentat...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Veronika Solopova</div>
-                    <div class="paper-summary">Large language models (LLMs) are increasingly proposed as agents in strategic decision environments, yet their behavior in structured geopolitical sim...</div>
-                    <a href="https://arxiv.org/abs/2603.02128" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Recursive Think-Answer Process for LLMs and VLMs...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Byung-Kwan Lee</div>
-                    <div class="paper-summary">Think-Answer reasoners such as DeepSeek-R1 have made notable progress by leveraging interpretable internal reasoning. However, despite the frequent pr...</div>
-                    <a href="https://arxiv.org/abs/2603.02099" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">ClinConsensus: A Consensus-Based Benchmark for Evaluating Chinese Medical LLMs a...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Xiang Zheng</div>
-                    <div class="paper-summary">Large language models (LLMs) are increasingly applied to health management, showing promise across disease prevention, clinical decision-making, and l...</div>
-                    <a href="https://arxiv.org/abs/2603.02097" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Adam Converges Without Any Modification On Update Rules...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Yushun Zhang</div>
-                    <div class="paper-summary">Adam is the default algorithm for training neural networks, including large language models (LLMs). However, \citet{reddi2019convergence} provided an ...</div>
-                    <a href="https://arxiv.org/abs/2603.02092" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-            </div>
+        <div id="loading" class="loading">
+            📊 正在加载论文数据...
         </div>
-    
-        <div class="category">
-            <div class="category-title">
-                🔒 隐私保护
-                <span class="category-count">148 篇</span>
-            </div>
-            <div class="paper-grid">
-    
-                <div class="paper">
-                    <div class="paper-title">Partial Causal Structure Learning for Valid Selective Conformal Inference under ...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Amir Asiaee</div>
-                    <div class="paper-summary">Selective conformal prediction can yield substantially tighter uncertainty sets when we can identify calibration examples that are exchangeable with t...</div>
-                    <a href="https://arxiv.org/abs/2603.02204" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Multi-Head Low-Rank Attention...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Songtao Liu</div>
-                    <div class="paper-summary">Long-context inference in large language models is bottlenecked by Key--Value (KV) cache loading during the decoding stage, where the sequential natur...</div>
-                    <a href="https://arxiv.org/abs/2603.02188" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">SageBwd: A Trainable Low-bit Attention...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Jintao Zhang</div>
-                    <div class="paper-summary">Low-bit attention, such as SageAttention, has emerged as an effective approach for accelerating model inference, but its applicability to training rem...</div>
-                    <a href="https://arxiv.org/abs/2603.02170" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Instrumental and Proximal Causal Inference with Gaussian Processes...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Yuqi Zhang</div>
-                    <div class="paper-summary">Instrumental variable (IV) and proximal causal learning (Proxy) methods are central frameworks for causal inference in the presence of unobserved conf...</div>
-                    <a href="https://arxiv.org/abs/2603.02159" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Orchestrating Multimodal DNN Workloads in Wireless Neural Processing...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Sai Xu</div>
-                    <div class="paper-summary">In edge inference, wireless resource allocation and accelerator-level deep neural network (DNN) scheduling have yet to be co-optimized in an end-to-en...</div>
-                    <a href="https://arxiv.org/abs/2603.02109" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Accelerating PDE Surrogates via RL-Guided Mesh Optimization...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Yang Meng</div>
-                    <div class="paper-summary">Deep surrogate models for parametric partial differential equations (PDEs) can deliver high-fidelity approximations but remain prohibitively data-hung...</div>
-                    <a href="https://arxiv.org/abs/2603.02066" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">PonderLM-3: Adaptive Token-Wise Pondering with Differentiable Masking...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 He Li</div>
-                    <div class="paper-summary">Test-time scaling has shown that allocating more additional computation at inference can improve generation quality, motivating a natural follow-up qu...</div>
-                    <a href="https://arxiv.org/abs/2603.02023" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Protection against Source Inference Attacks in Federated Learning...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Andreas Athanasiou</div>
-                    <div class="paper-summary">Federated Learning (FL) was initially proposed as a privacy-preserving machine learning paradigm. However, FL has been shown to be susceptible to a se...</div>
-                    <a href="https://arxiv.org/abs/2603.02017" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Noise-Calibrated Inference from Differentially Private Sufficient Statistics in ...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Amir Asiaee</div>
-                    <div class="paper-summary">Many differentially private (DP) data release systems either output DP synthetic data and leave analysts to perform inference as usual, which can lead...</div>
-                    <a href="https://arxiv.org/abs/2603.02010" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Accurate, private, secure, federated U-statistics with higher degree...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Quentin Sinh</div>
-                    <div class="paper-summary">We study the problem of computing a U-statistic with a kernel function f of degree k $\ge$ 2, i.e., the average of some function f over all k-tuples o...</div>
-                    <a href="https://arxiv.org/abs/2603.01986" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-            </div>
-        </div>
-    
-        <div class="category">
-            <div class="category-title">
-                🛡️ 对抗机器学习
-                <span class="category-count">58 篇</span>
-            </div>
-            <div class="paper-grid">
-    
-                <div class="paper">
-                    <div class="paper-title">On the Rate of Convergence of GD in Non-linear Neural Networks: An Adversarial R...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Guy Smorodinsky</div>
-                    <div class="paper-summary">We study the convergence dynamics of Gradient Descent (GD) in a minimal binary classification setting, consisting of a two-neuron ReLU network and two...</div>
-                    <a href="https://arxiv.org/abs/2603.02095" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Explanation-Guided Adversarial Training for Robust and Interpretable Models...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Chao Chen</div>
-                    <div class="paper-summary">Deep neural networks (DNNs) have achieved remarkable performance in many tasks, yet they often behave as opaque black boxes. Explanation-guided learni...</div>
-                    <a href="https://arxiv.org/abs/2603.01938" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Co-Evolutionary Multi-Modal Alignment via Structured Adversarial Evolution...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Guoxin Shi</div>
-                    <div class="paper-summary">Adversarial behavior plays a central role in aligning large language models with human values. However, existing alignment methods largely rely on sta...</div>
-                    <a href="https://arxiv.org/abs/2603.01784" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">YCDa: YCbCr Decoupled Attention for Real-time Realistic Camouflaged Object Detec...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 PeiHuang Zheng</div>
-                    <div class="paper-summary">Human vision exhibits remarkable adaptability in perceiving objects under camouflage. When color cues become unreliable, the visual system instinctive...</div>
-                    <a href="https://arxiv.org/abs/2603.01602" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Adversarial Query Synthesis via Bayesian Optimization...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Jeffrey Tao</div>
-                    <div class="paper-summary">Benchmark workloads are extremely important to the database management research community, especially as more machine learning components are integrat...</div>
-                    <a href="https://arxiv.org/abs/2603.01570" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Rate-Distortion Signatures of Generalization and Information Trade-offs...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Leyla Roksan Caglar</div>
-                    <div class="paper-summary">Generalization to novel visual conditions remains a central challenge for both human and machine vision, yet standard robustness metrics offer limited...</div>
-                    <a href="https://arxiv.org/abs/2603.01568" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">I Can't Believe It's Not Robust: Catastrophic Collapse of Safety Classifiers und...</div>
-                    <div class="paper-meta">📅 2026-03-01 | 👤 Subramanyam Sahoo</div>
-                    <div class="paper-summary">Instruction tuned reasoning models are increasingly deployed with safety classifiers trained on frozen embeddings, assuming representation stability a...</div>
-                    <a href="https://arxiv.org/abs/2603.01297" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">S2O: Enhancing Adversarial Training with Second-Order Statistics of Weights...</div>
-                    <div class="paper-meta">📅 2026-03-01 | 👤 Gaojie Jin</div>
-                    <div class="paper-summary">Adversarial training has emerged as a highly effective way to improve the robustness of deep neural networks (DNNs). It is typically conceptualized as...</div>
-                    <a href="https://arxiv.org/abs/2603.01264" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Hide&amp;Seek: Remove Image Watermarks with Negligible Cost via Pixel-wise Recon...</div>
-                    <div class="paper-meta">📅 2026-03-01 | 👤 Huajie Chen</div>
-                    <div class="paper-summary">Watermarking has emerged as a key defense against the misuse of machine-generated images (MGIs). Yet the robustness of these protections remains under...</div>
-                    <a href="https://arxiv.org/abs/2603.01067" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">AMDS: Attack-Aware Multi-Stage Defense System for Network Intrusion Detection wi...</div>
-                    <div class="paper-meta">📅 2026-03-01 | 👤 Oluseyi Olukola</div>
-                    <div class="paper-summary">Machine learning based network intrusion detection systems are vulnerable to adversarial attacks that degrade classification performance under both gr...</div>
-                    <a href="https://arxiv.org/abs/2603.00859" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-            </div>
-        </div>
-    
-        <div class="category">
-            <div class="category-title">
-                🦠 恶意软件/威胁检测
-                <span class="category-count">76 篇</span>
-            </div>
-            <div class="paper-grid">
-    
-                <div class="paper">
-                    <div class="paper-title">Adaptive Confidence Regularization for Multimodal Failure Detection...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Moru Liu</div>
-                    <div class="paper-summary">The deployment of multimodal models in high-stakes domains, such as self-driving vehicles and medical diagnostics, demands not only strong predictive ...</div>
-                    <a href="https://arxiv.org/abs/2603.02200" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Is Bigger Always Better? Efficiency Analysis in Resource-Constrained Small Objec...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Kwame Mbobda-Kuate</div>
-                    <div class="paper-summary">Scaling laws assume larger models trained on more data consistently outperform smaller ones -- an assumption that drives model selection in computer v...</div>
-                    <a href="https://arxiv.org/abs/2603.02142" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Detection-Gated Glottal Segmentation with Zero-Shot Cross-Dataset Transfer and C...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Harikrishnan Unnikrishnan</div>
-                    <div class="paper-summary">Background: Accurate glottal segmentation in high-speed videoendoscopy (HSV) is essential for extracting kinematic biomarkers of laryngeal function. H...</div>
-                    <a href="https://arxiv.org/abs/2603.02087" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">What Exactly do Children Receive in Language Acquisition? A Case Study on CHILDE...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Zhenghao Herbert Zhou</div>
-                    <div class="paper-summary">Children's acquisition of filler-gap dependencies has been argued by some to depend on innate grammatical knowledge, while others suggest that the dis...</div>
-                    <a href="https://arxiv.org/abs/2603.02082" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">TRAKNN: Efficient Trajectory Aware Spatiotemporal kNN for Rare Meteorological Tr...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Guillaume Coulaud</div>
-                    <div class="paper-summary">Extreme weather events, such as windstorms and heatwaves, are driven by persistent atmospheric circulation patterns that evolve over several consecuti...</div>
-                    <a href="https://arxiv.org/abs/2603.02059" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">TCG CREST System Description for the DISPLACE-M Challenge...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Nikhil Raghav</div>
-                    <div class="paper-summary">This report presents the TCG CREST system description for Track 1 (Speaker Diarization) of the DISPLACE-M challenge, focusing on naturalistic medical ...</div>
-                    <a href="https://arxiv.org/abs/2603.02030" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">physfusion: A Transformer-based Dual-Stream Radar and Vision Fusion Framework fo...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Yuting Wan</div>
-                    <div class="paper-summary">Detecting water-surface targets for Unmanned Surface Vehicles (USVs) is challenging due to wave clutter,   specular reflections, and weak appearance c...</div>
-                    <a href="https://arxiv.org/abs/2603.01947" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Phishing the Phishers with SpecularNet: Hierarchical Graph Autoencoding for Refe...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Tailai Song</div>
-                    <div class="paper-summary">Phishing remains the most pervasive threat to the Web, enabling large-scale credential theft and financial fraud through deceptive webpages. While rec...</div>
-                    <a href="https://arxiv.org/abs/2603.01874" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">GCTAM: Global and Contextual Truncated Affinity Combined Maximization Model For ...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Xiong Zhang</div>
-                    <div class="paper-summary">Anomalies often occur in real-world information networks/graphs, such as malevolent users, malicious comments, banned users, and fake news in social g...</div>
-                    <a href="https://arxiv.org/abs/2603.01806" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">A SUPERB-Style Benchmark of Self-Supervised Speech Models for Audio Deepfake Det...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Hashim Ali</div>
-                    <div class="paper-summary">Self-supervised learning (SSL) has transformed speech processing, with benchmarks such as SUPERB establishing fair comparisons across diverse downstre...</div>
-                    <a href="https://arxiv.org/abs/2603.01482" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-            </div>
-        </div>
-    
-        <div class="category">
-            <div class="category-title">
-                🔐 其他安全
-                <span class="category-count">84 篇</span>
-            </div>
-            <div class="paper-grid">
-    
-                <div class="paper">
-                    <div class="paper-title">Frontier Models Can Take Actions at Low Probabilities...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Alex Serrano</div>
-                    <div class="paper-summary">Pre-deployment evaluations inspect only a limited sample of model actions. A malicious model seeking to evade oversight could exploit this by randomiz...</div>
-                    <a href="https://arxiv.org/abs/2603.02202" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">From Leaderboard to Deployment: Code Quality Challenges in AV Perception Reposit...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Mateus Karvat</div>
-                    <div class="paper-summary">Autonomous vehicle (AV) perception models are typically evaluated solely on benchmark performance metrics, with limited attention to code quality, pro...</div>
-                    <a href="https://arxiv.org/abs/2603.02194" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Leveraging Model Soups to Classify Intangible Cultural Heritage Images from the ...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Quoc-Khang Tran</div>
-                    <div class="paper-summary">The classification of Intangible Cultural Heritage (ICH) images in the Mekong Delta poses unique challenges due to limited annotated data, high visual...</div>
-                    <a href="https://arxiv.org/abs/2603.02181" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Boosting Device Utilization in Control Flow Auditing...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Alexandra Lengert</div>
-                    <div class="paper-summary">Micro-Controller Units (MCUs) are widely used in safety-critical systems, making them attractive targets for attacks. This calls for lightweight defen...</div>
-                    <a href="https://arxiv.org/abs/2603.02161" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">SoK: Is Sustainable the New Usable? Debunking The Myth of Fundamental Incompatib...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Maxwell Keleher</div>
-                    <div class="paper-summary">Every year, millions of functional systems become e-waste because users are pressured to send their systems to landfills due to a lack of vendor suppo...</div>
-                    <a href="https://arxiv.org/abs/2603.01958" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">OpenAutoNLU: Open Source AutoML Library for NLU...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Grigory Arshinov</div>
-                    <div class="paper-summary">OpenAutoNLU is an open-source automated machine learning library for natural language understanding (NLU) tasks, covering both text classification and...</div>
-                    <a href="https://arxiv.org/abs/2603.01824" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">An Analysis of Multi-Task Architectures for the Hierarchic Multi-Label Problem o...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Alexandru Manole</div>
-                    <div class="paper-summary">Most information in our world is organized hierarchically; however, many Deep Learning approaches do not leverage this semantically rich structure. Re...</div>
-                    <a href="https://arxiv.org/abs/2603.01746" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Security Risks in Machining Process Monitoring: Sequence-to-Sequence Learning fo...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Lukas Krupp</div>
-                    <div class="paper-summary">Accelerometer-based process monitoring is widely deployed in modern machining systems. When mounted on moving machine components, such sensors implici...</div>
-                    <a href="https://arxiv.org/abs/2603.01702" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">Multimodal Mixture-of-Experts with Retrieval Augmentation for Protein Active Sit...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Jiayang Wu</div>
-                    <div class="paper-summary">Accurate identification of protein active sites at the residue level is crucial for understanding protein function and advancing drug discovery. Howev...</div>
-                    <a href="https://arxiv.org/abs/2603.01511" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-                <div class="paper">
-                    <div class="paper-title">UTICA: Multi-Objective Self-Distllation Foundation Model Pretraining for Time Se...</div>
-                    <div class="paper-meta">📅 2026-03-02 | 👤 Yessin Moakher</div>
-                    <div class="paper-summary">Self-supervised foundation models have achieved remarkable success across domains, including time series. However, the potential of non-contrastive me...</div>
-                    <a href="https://arxiv.org/abs/2603.01348" target="_blank" class="paper-link">→ 查看论文</a>
-                </div>
-            
-            </div>
-        </div>
-    
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="categories-container"></div>
+
         <div class="footer">
             <p>📊 数据来源: arXiv (cs.CR, cs.LG, cs.AI, cs.CL) | 自动追踪系统</p>
-            <p>最后更新: 2026-03-04 08:26:40</p>
+            <p id="last-update">最后更新: -</p>
         </div>
     </div>
+
+    <script>
+        // 数据加载和渲染逻辑
+        const DATA_URL = './data/papers-2026.json';
+        
+        // 分类显示顺序
+        const categoryOrder = [
+            '🤖 大模型/Agent安全',
+            '🔒 隐私保护',
+            '🛡️ 对抗机器学习',
+            '🦠 恶意软件/威胁检测',
+            '🔐 其他安全'
+        ];
+
+        async function loadData() {
+            try {
+                const response = await fetch(DATA_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const data = await response.json();
+                renderDashboard(data);
+            } catch (error) {
+                showError(`加载数据失败: ${error.message}`);
+            }
+        }
+
+        function renderDashboard(data) {
+            const papers = data.papers || [];
+            
+            // 按分类统计
+            const categories = {};
+            categoryOrder.forEach(cat => categories[cat] = []);
+            
+            papers.forEach(paper => {
+                const cat = paper.category;
+                if (categories.hasOwnProperty(cat)) {
+                    categories[cat].push(paper);
+                }
+            });
+
+            // 更新统计信息
+            document.getElementById('total-papers').textContent = papers.length;
+            document.getElementById('active-categories').textContent = 
+                Object.values(categories).filter(c => c.length > 0).length;
+            
+            const updateDate = data.updated_at ? new Date(data.updated_at) : new Date();
+            document.getElementById('update-date').textContent = 
+                updateDate.toISOString().split('T')[0];
+            
+            document.getElementById('date-range').textContent = 
+                `检索时间范围: 2026-01-01 至 ${updateDate.toISOString().split('T')[0]}`;
+            
+            document.getElementById('last-update').textContent = 
+                `最后更新: ${updateDate.toLocaleString('zh-CN')}`;
+
+            // 渲染各分类的论文
+            const container = document.getElementById('categories-container');
+            container.innerHTML = '';
+
+            for (const catName of categoryOrder) {
+                const catPapers = categories[catName];
+                
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'category-title';
+                titleDiv.innerHTML = `
+                    ${catName}
+                    <span class="category-count">${catPapers.length} 篇</span>
+                `;
+                categoryDiv.appendChild(titleDiv);
+
+                const gridDiv = document.createElement('div');
+                gridDiv.className = 'paper-grid';
+
+                if (catPapers.length > 0) {
+                    // 按日期排序，取最新10篇
+                    const sortedPapers = catPapers
+                        .sort((a, b) => new Date(b.published) - new Date(a.published))
+                        .slice(0, 10);
+
+                    sortedPapers.forEach(paper => {
+                        const paperDiv = document.createElement('div');
+                        paperDiv.className = 'paper';
+                        
+                        const summary = (paper.summary || '').substring(0, 150).replace(/\n/g, ' ');
+                        const author = (paper.author || 'Unknown').substring(0, 30);
+                        
+                        paperDiv.innerHTML = `
+                            <div class="paper-title">${escapeHtml(paper.title.substring(0, 80))}...</div>
+                            <div class="paper-meta">📅 ${paper.published} | 👤 ${escapeHtml(author)}</div>
+                            <div class="paper-summary">${escapeHtml(summary)}...</div>
+                            <a href="${paper.url}" target="_blank" class="paper-link">→ 查看论文</a>
+                        `;
+                        gridDiv.appendChild(paperDiv);
+                    });
+                } else {
+                    gridDiv.innerHTML = '<div class="empty">暂无论文</div>';
+                }
+
+                categoryDiv.appendChild(gridDiv);
+                container.appendChild(categoryDiv);
+            }
+
+            // 隐藏加载提示
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 页面加载时自动加载数据
+        window.addEventListener('DOMContentLoaded', loadData);
+    </script>
 </body>
 </html>
